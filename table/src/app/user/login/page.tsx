@@ -4,7 +4,7 @@ import { faUser, faCheck, faKey } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { login } from '@/app/GlobalRedux/Features/authrize/authorizeSlice';
 import { authorizeUser } from '@/app/utils/api';
-import { RedirectType, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { UserData } from '@/app/types/UserData';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/GlobalRedux/store';
