@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser, faCheck, faKey } from '@fortawesome/free-solid-svg-icons'
+
 const Login = () => {
   return (
     <div className="is-flex-direction-column tile is-8 container">
@@ -11,10 +14,10 @@ const Login = () => {
             value=""
           />
           <span className="icon is-small is-left">
-            <i className="fas fa-user"></i>
+            <FontAwesomeIcon className="tile is-5" icon={faUser}/>
           </span>
           <span className="icon is-small is-right">
-            <i className="fas fa-check"></i>
+            <FontAwesomeIcon className="tile is-5" icon={faCheck}/>
           </span>
         </div>
         <p className="help is-danger">This username does not exsists</p>
@@ -30,10 +33,10 @@ const Login = () => {
             value=""
           />
           <span className="icon is-small is-left">
-            <i className="fas fa-envelope"></i>
+            <FontAwesomeIcon className="tile is-5" icon={faKey}/>
           </span>
           <span className="icon is-small is-right">
-            <i className="fas fa-exclamation-triangle"></i>
+            <FontAwesomeIcon className="tile is-5" icon={faCheck}/>
           </span>
         </div>
         <p className="help is-danger">This password is invalid</p>
