@@ -1,10 +1,12 @@
-import Image from "next/image";
+"use client";
+
 import styles from "./page.module.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import withAuth from "./HOCs/withAuth";
 config.autoAddCss = false;
 
-export default function Home() {
+const Home = () => {
   return (
     <main className={styles.main}>
       <table className="table">
@@ -40,4 +42,6 @@ export default function Home() {
       </table>
     </main>
   );
-}
+};
+
+export default withAuth(Home);

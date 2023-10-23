@@ -1,5 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faCheck, faKey } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faCheck, faKey } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   return (
@@ -14,10 +14,10 @@ const Login = () => {
             value=""
           />
           <span className="icon is-small is-left">
-            <FontAwesomeIcon className="tile is-5" icon={faUser}/>
+            <FontAwesomeIcon className="tile is-5" icon={faUser} />
           </span>
           <span className="icon is-small is-right">
-            <FontAwesomeIcon className="tile is-5" icon={faCheck}/>
+            <FontAwesomeIcon className="tile is-5" icon={faCheck} />
           </span>
         </div>
         <p className="help is-danger">This username does not exsists</p>
@@ -33,10 +33,10 @@ const Login = () => {
             value=""
           />
           <span className="icon is-small is-left">
-            <FontAwesomeIcon className="tile is-5" icon={faKey}/>
+            <FontAwesomeIcon className="tile is-5" icon={faKey} />
           </span>
           <span className="icon is-small is-right">
-            <FontAwesomeIcon className="tile is-5" icon={faCheck}/>
+            <FontAwesomeIcon className="tile is-5" icon={faCheck} />
           </span>
         </div>
         <p className="help is-danger">This password is invalid</p>
