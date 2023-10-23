@@ -1,7 +1,8 @@
 import { Login } from "../types/Login"
+import { UserData } from "../types/UserData";
 import { client } from "./fetchClient"
 
 
-export const authorizeUser = () => {
-  return client.get<Login>('/login');
+export const authorizeUser = (formData: UserData) => {
+  return client.post<Login>('login/', formData);
 }

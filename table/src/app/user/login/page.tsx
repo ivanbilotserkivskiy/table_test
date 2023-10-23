@@ -1,15 +1,32 @@
-"use client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faCheck, faKey } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+'use client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faCheck, faKey } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react';
+import { login } from '@/app/GlobalRedux/Features/authrize/authorizeSlice';
+import { authorizeUser } from '@/app/utils/api';
+import { RedirectType, redirect } from 'next/navigation';
+import { UserData } from '@/app/types/UserData';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/app/GlobalRedux/store';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    usernam: "",
-    password: "",
+  const [formData, setFormData] = useState<UserData>({
+    username: '',
+    password: '',
   });
 
-  const [isError, setIsError] = useState(false);
+  const authorize = useSelector(
+    (state: RootState) => state.authorize.authorized
+  );
+  const dispatch = useDispatch();
+
+  const [isError, setIsError] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (authorize) {
+      redirect('/');
+    }
+  }, [authorize]);
 
   const changeFormData = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
@@ -20,6 +37,16 @@ const Login = () => {
 
   const submitFromData = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    setIsError(() => false);
+
+    const authorizationResult = await authorizeUser(formData);
+
+    if (authorizationResult.error) {
+      return setIsError(() => true);
+    }
+
+    dispatch(login());
   };
 
   return (
@@ -33,7 +60,8 @@ const Login = () => {
               type="text"
               placeholder="Username"
               name="username"
-              value={formData.usernam}
+              value={formData.username}
+              autoComplete="username"
               onChange={changeFormData}
             />
             <span className="icon is-small is-left">
@@ -53,6 +81,7 @@ const Login = () => {
               type="password"
               placeholder="Password"
               name="password"
+              autoComplete="current-password"
               value={formData.password}
               onChange={changeFormData}
             />
