@@ -16,7 +16,9 @@ function request<T>(
     };
   }
   return fetch(baseURL + url, options)
-    .then(response => response.json());
+    .then(response => {
+      return response.json()
+    }).catch(err => err)
 }
 
 export const client = {

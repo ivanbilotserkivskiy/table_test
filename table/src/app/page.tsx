@@ -10,29 +10,34 @@ import { getTableData, updatePersonData } from './utils/api';
 import Pagination from './components/Pagination';
 import { useSearchParams } from 'next/navigation';
 import Modal from './components/Modal';
+import { toast, Toaster } from 'react-hot-toast';
+import { ErrorInfo } from './types/ErrorInfo';
 
 const Home = () => {
   const [tableData, setTableData] = useState<TableData>(tableMockData);
   const [updateData, setUpdateData] = useState<PersonData | null>(null);
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [errorInfo, setErrorInfo] = useState<ErrorInfo | null>(null);
   const searchParams = useSearchParams();
 
-  const offset = searchParams.get('offset') || 0;
-  const limit = searchParams.get('limit') || 10;
-
   const getDataFromServer = async () => {
+    const offset = searchParams.get('offset') || 0;
+    const limit = searchParams.get('limit') || 10;
     const data = await getTableData(`limit=${limit}&offset=${offset}`);
     setTableData(data);
   };
 
   useEffect(() => {
     getDataFromServer();
-  }, [offset]);
+  }, [searchParams]);
 
   const editUpdateData = (data: PersonData | null) => {
+    setErrorInfo(null);
     setUpdateData(data);
   };
 
-  const changeUdateData = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeUpdateData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHasChanges(true);
     setUpdateData((prevData) => ({
       ...(prevData as PersonData),
       [event.target.name]: event.target.value,
@@ -40,16 +45,34 @@ const Home = () => {
   };
 
   const applyUpdateData = async (data: PersonData) => {
-    await updatePersonData(data);
+    try {
+      if (!hasChanges) {
+        toast.error('No changes');
+        return;
+      }
+      const updateInfo = await updatePersonData(data);
 
-    setUpdateData(null);
+      if (updateInfo.id) {
+        toast.success('Person updated');
+        setErrorInfo(null);
+        setUpdateData(null);
+        getDataFromServer();
+      } else {
+        setErrorInfo(updateInfo);
+      }
+    } catch (err) {
+      console.log(err);
 
-    getDataFromServer();
+      return;
+    }
   };
 
   return (
     <main>
-      <table className="table mt-5 is-fullwidth">
+      <div>
+        <Toaster />
+      </div>
+      <table className="table mt-5 container is-fullwidth">
         <thead>
           <tr>
             <th>Id</th>
@@ -73,14 +96,19 @@ const Home = () => {
               data={row}
               updateData={updateData}
               editUpdateData={editUpdateData}
-              applyUpdateData={applyUpdateData}
-              changeUdateData={changeUdateData}
             />
           ))}
         </tbody>
       </table>
       <Pagination count={tableData.count} />
-      <Modal />
+      <Modal
+        data={updateData}
+        editUpdateData={editUpdateData}
+        applyUpdateData={applyUpdateData}
+        changeUpdateData={changeUpdateData}
+        errorInfo={errorInfo}
+      />
+      <div className="is-flex is-justify-content-center"></div>
     </main>
   );
 };

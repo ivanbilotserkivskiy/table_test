@@ -14,7 +14,10 @@ const Pagination: React.FC<Props> = ({ count }) => {
   const offset = searchParams.get('offset') || 0;
   const limit = searchParams.get('limit') || '10';
 
-  const pages = Array.from({ length: count / +limit }, (_, i) => i + 1);
+  const pages = Array.from(
+    { length: Math.ceil(count / +limit) },
+    (_, i) => i + 1
+  );
   const currentPage = Math.ceil(+offset / +limit) + 1;
 
   const createQueryString = useCallback(
@@ -33,36 +36,6 @@ const Pagination: React.FC<Props> = ({ count }) => {
       role="navigation"
       aria-label="pagination"
     >
-      <Link
-        className="pagination-previous"
-        href={
-          pathname +
-          '?' +
-          createQueryString(
-            'offset',
-            `${currentPage <= 1 ? 0 : (currentPage - 2) * +limit}`
-          )
-        }
-      >
-        Previous
-      </Link>
-      <Link
-        className="pagination-next"
-        href={
-          pathname +
-          '?' +
-          createQueryString(
-            'offset',
-            `${
-              currentPage >= pages.length - 1
-                ? pages[pages.length - 2] * +limit
-                : pages[currentPage - 1] * +limit
-            }`
-          )
-        }
-      >
-        Next page
-      </Link>
       <ul className="pagination-list">
         <li>
           <Link

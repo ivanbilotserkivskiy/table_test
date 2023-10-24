@@ -7,7 +7,7 @@ export interface AuthorizeState {
 }
 
 const initialState: AuthorizeState = {
-  authorized: true
+  authorized: false
 }
 
 export const authorizeSlice = createSlice({

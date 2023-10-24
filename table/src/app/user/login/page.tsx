@@ -50,7 +50,7 @@ const Login = () => {
   };
 
   return (
-    <div className="is-flex-direction-column tile is-8 container">
+    <div className="is-flex-direction-column tile is-3 container pt-5">
       <form action="" method="POST" onSubmit={submitFromData}>
         <div className="field">
           <label className="label">Username</label>

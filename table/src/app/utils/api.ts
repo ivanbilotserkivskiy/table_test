@@ -14,5 +14,5 @@ export const getTableData = (params:string) => {
 }
 
 export const updatePersonData = ({ name, email, phone_number, address, birthday_date, id }: PersonData) => {
-  return client.put<PersonData>(`table/${id}`, { name, email, phone_number, address, birthday_date})
+  return client.put<PersonData>(`table/${id}/`, { name, email, phone_number, address, birthday_date})
 }
