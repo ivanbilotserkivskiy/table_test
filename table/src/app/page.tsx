@@ -18,6 +18,7 @@ const Home = () => {
   const [updateData, setUpdateData] = useState<PersonData | null>(null);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [errorInfo, setErrorInfo] = useState<ErrorInfo | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
 
   const getDataFromServer = async () => {
@@ -46,6 +47,7 @@ const Home = () => {
 
   const applyUpdateData = async (data: PersonData) => {
     try {
+      setIsLoading(true);
       if (!hasChanges) {
         toast.error('No changes');
         return;
@@ -64,6 +66,8 @@ const Home = () => {
       console.log(err);
 
       return;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,17 +79,17 @@ const Home = () => {
       <table className="table mt-5 container is-fullwidth">
         <thead>
           <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>
+            <th className="has-background-info">Id</th>
+            <th className="has-background-info">Name</th>
+            <th className="has-background-info">Email</th>
+            <th className="has-background-info">
               <abbr title="Birthday Date">Birthday</abbr>
             </th>
-            <th>
+            <th className="has-background-info">
               <abbr title="Phone Number">Phone</abbr>
             </th>
-            <th>Address</th>
-            <th></th>
+            <th className="has-background-info">Address</th>
+            <th className="has-background-info"></th>
           </tr>
         </thead>
 
@@ -107,6 +111,7 @@ const Home = () => {
         applyUpdateData={applyUpdateData}
         changeUpdateData={changeUpdateData}
         errorInfo={errorInfo}
+        isLoading={isLoading}
       />
       <div className="is-flex is-justify-content-center"></div>
     </main>

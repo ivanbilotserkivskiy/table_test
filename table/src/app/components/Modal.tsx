@@ -9,6 +9,7 @@ type Props = {
   applyUpdateData: (data: PersonData) => void;
   changeUpdateData: (event: React.ChangeEvent<HTMLInputElement>) => void;
   errorInfo: ErrorInfo | null;
+  isLoading: boolean;
 };
 
 const Modal: React.FC<Props> = ({
@@ -17,6 +18,7 @@ const Modal: React.FC<Props> = ({
   applyUpdateData,
   changeUpdateData,
   errorInfo,
+  isLoading,
 }) => {
   return (
     <div
@@ -128,6 +130,7 @@ const Modal: React.FC<Props> = ({
         <footer className="modal-card-foot">
           <button
             className="button is-success"
+            disabled={isLoading}
             onClick={() => {
               if (data) {
                 applyUpdateData(data);

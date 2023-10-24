@@ -8,12 +8,20 @@ import { redirect } from 'next/navigation';
 import { UserData } from '@/app/types/UserData';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/GlobalRedux/store';
+import { pattern } from '@/app/utils/pattern';
 
 const Login = () => {
   const [formData, setFormData] = useState<UserData>({
     username: '',
     password: '',
   });
+
+  const [formDataError, setFormDataError] = useState({
+    username: '',
+    password: '',
+  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const authorize = useSelector(
     (state: RootState) => state.authorize.authorized
@@ -36,17 +44,55 @@ const Login = () => {
   };
 
   const submitFromData = async (event: React.FormEvent) => {
+    setIsError(false);
+
+    setFormDataError({
+      username: '',
+      password: '',
+    });
+    if (formData.username.length < 3) {
+      setFormDataError((prev) => ({
+        ...prev,
+        username: 'The username must contain at least 3 symbols',
+      }));
+
+      return;
+    }
+    if (formData.password.length < 8) {
+      setFormDataError((prev) => ({
+        ...prev,
+        password: 'The password must contain at least 8 symbols',
+      }));
+
+      return;
+    }
+
+    if (!pattern.test(formData.password)) {
+      setFormDataError((prev) => ({
+        ...prev,
+        password: 'The password must contain at least one number',
+      }));
+
+      return;
+    }
+
     event.preventDefault();
 
     setIsError(() => false);
 
-    const authorizationResult = await authorizeUser(formData);
+    try {
+      setIsLoading(true);
+      const authorizationResult = await authorizeUser(formData);
+      if (authorizationResult.error) {
+        return setIsError(() => true);
+      }
 
-    if (authorizationResult.error) {
-      return setIsError(() => true);
+      dispatch(login());
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-
-    dispatch(login());
   };
 
   return (
@@ -71,10 +117,13 @@ const Login = () => {
               <FontAwesomeIcon className="tile is-5" icon={faCheck} />
             </span>
           </div>
+          {formDataError.username ? (
+            <p className="help is-size-6 is-danger">{formDataError.username}</p>
+          ) : null}
         </div>
 
         <div className="field">
-          <label className="label">Email</label>
+          <label className="label">Password</label>
           <div className="control has-icons-left has-icons-right">
             <input
               className="input"
@@ -92,6 +141,9 @@ const Login = () => {
               <FontAwesomeIcon className="tile is-5" icon={faCheck} />
             </span>
           </div>
+          {formDataError.password ? (
+            <p className="help is-size-6 is-danger">{formDataError.password}</p>
+          ) : null}
         </div>
 
         {isError ? (
@@ -105,7 +157,11 @@ const Login = () => {
 
         <div className="field is-grouped">
           <div className="control">
-            <button className="button is-link" type="submit">
+            <button
+              className="button is-link"
+              type="submit"
+              disabled={isLoading}
+            >
               Log In
             </button>
           </div>
