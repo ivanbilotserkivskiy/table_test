@@ -7,20 +7,26 @@ import TableRow from './components/TableRow';
 import { tableMockData } from './mockData/tableMockData';
 import { PersonData } from './types/PersonData';
 import { getTableData, updatePersonData } from './utils/api';
+import Pagination from './components/Pagination';
+import { useSearchParams } from 'next/navigation';
+import Modal from './components/Modal';
 
 const Home = () => {
   const [tableData, setTableData] = useState<TableData>(tableMockData);
   const [updateData, setUpdateData] = useState<PersonData | null>(null);
+  const searchParams = useSearchParams();
+
+  const offset = searchParams.get('offset') || 0;
+  const limit = searchParams.get('limit') || 10;
 
   const getDataFromServer = async () => {
-    const data = await getTableData();
-
+    const data = await getTableData(`limit=${limit}&offset=${offset}`);
     setTableData(data);
   };
 
   useEffect(() => {
     getDataFromServer();
-  }, []);
+  }, [offset]);
 
   const editUpdateData = (data: PersonData | null) => {
     setUpdateData(data);
@@ -43,7 +49,7 @@ const Home = () => {
 
   return (
     <main>
-      <table className="table is-fullwidth">
+      <table className="table mt-5 is-fullwidth">
         <thead>
           <tr>
             <th>Id</th>
@@ -73,6 +79,8 @@ const Home = () => {
           ))}
         </tbody>
       </table>
+      <Pagination count={tableData.count} />
+      <Modal />
     </main>
   );
 };

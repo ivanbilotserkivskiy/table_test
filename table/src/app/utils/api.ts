@@ -9,8 +9,8 @@ export const authorizeUser = (formData: UserData) => {
   return client.post<Login>('login/', formData);
 }
 
-export const getTableData = () => {
-  return client.get<TableData>('table/');
+export const getTableData = (params:string) => {
+  return client.get<TableData>(`table/?${params}`);
 }
 
 export const updatePersonData = ({ name, email, phone_number, address, birthday_date, id }: PersonData) => {

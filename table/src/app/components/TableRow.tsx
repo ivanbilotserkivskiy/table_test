@@ -20,7 +20,7 @@ const TableRow: React.FC<Props> = ({
 }) => {
   return updateData && updateData.id === data.id ? (
     <tr>
-      <th>{data.id}</th>
+      <th className="is-vcentered">{data.id}</th>
       <td className="is-vcentered">
         <input
           type="text"
@@ -84,8 +84,8 @@ const TableRow: React.FC<Props> = ({
       </td>
     </tr>
   ) : (
-    <tr is-clickable>
-      <th>{data.id}</th>
+    <tr>
+      <th className="is-vcentered">{data.id}</th>
       <td className="is-vcentered">{data.name}</td>
       <td className="is-vcentered">
         <address>
